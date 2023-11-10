@@ -40,8 +40,9 @@ builtin(int c)
 		if (c != 2) {
 			error();
 			return -1;
-		} else			
+		} else {			
 			return 1;
+		}
 	}
 	else if (strcmp(argvector[0], "path") == 0)
 		return 2;
@@ -87,28 +88,34 @@ getinput(void)
 	if (fgets(buf, sizeof(buf), stdin) == NULL) {
 		printf("\n");
 		exit(0);
-	} else
+	} else {
 		buf[strcspn(buf, "\n")] = '\0';
+	}
 	return p;
 }
 
-void
+int
 execute(void)
 {
-	char s[] = "/bin/";
-	char path[PATH_MAX];
-	strcpy(path, s);
-	printf("%s\n", path);
+	char p[BUFSIZE] = "/bin/";
+	strlcat(p, argvector[0], sizeof(p));
 
+	if (access(p, X_OK) == -1) {
+		error();
+		return -1;
+	}
+	
 	char *a[] = {argvector[0], argvector[1], NULL};
 	int rc;
 
-	if ((rc = fork()) == -1) 
+	if ((rc = fork()) == -1)
 		error();
 	else if (rc == 0)
-		execv("bin/ls", a);
-	else
+		execv(p, a);
+	else 
 		wait(NULL);
+	
+	return 0;
 }
 	
 int
@@ -137,8 +144,8 @@ main(int argc, char *argv[])
 				break;
 			default:
 				execute();
-				break;
-		}
+				break;      
+		} 
 	}
 
 	return 0;
