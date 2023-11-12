@@ -97,7 +97,7 @@ getinput(void)
 int
 execute(void)
 {
-	char p[BUFSIZE] = "/bin/";
+	char p[32] = "/bin/";
 	strlcat(p, argvector[0], sizeof(p));
 
 	if (access(p, X_OK) == -1) {
@@ -105,7 +105,7 @@ execute(void)
 		return -1;
 	}
 	
-	char *a[] = {argvector[0], argvector[1], NULL};
+	char *a[] = {argvector[0], argvector[1], argvector[2], NULL};
 	int rc;
 
 	if ((rc = fork()) == -1)
@@ -119,7 +119,7 @@ execute(void)
 }
 	
 int
-main(int argc, char *argv[])
+main(void)
 {	
 	const char *e = "exit";
 
