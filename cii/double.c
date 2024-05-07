@@ -11,7 +11,7 @@ void doubleword(char *, FILE *);
 
 int main(int argc, char *argv[])
 {
-    for (int i = 0; i < argc; ++i) {
+    for (int i = 1; i < argc; ++i) {
         FILE *fp = fopen(argv[i], "r");
             if (fp == NULL) {
                 fprintf(stderr, "%s: can't open '%s' (%s)\n",
@@ -54,10 +54,12 @@ void doubleword(char *name, FILE *fp)
     linenum = 1;
     prev[0] = '\0';
     while (getword(fp, word, sizeof word)) {
-        if (isalpha(word[0]) && strcmp(prev, word) == 0)
+        if (isalpha(word[0]) && strcmp(prev, word) == 0) 
+	{
             if (name)
                 printf("%s:", name);
-        printf("%d: %s\n", linenum, word); 
+            printf("%d: %s\n", linenum, word);
+	}
         strcpy(prev, word);
     }
 }
